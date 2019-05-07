@@ -1,23 +1,65 @@
+
+
+
 <!DOCTYPE html>
 <html>
+
 <head>
-    
-<title>Project Mirror</title>
-    
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>MockAPI</title>
+
+  <style>
+    div {
+    border: 2px solid green;
+    padding: 5px;
+    margin: 5px;
+  } 
+  
+
+</style>
+
 </head>
-    
-    
+
 <body>
+  <a href="" onclick="homeFunction(true)">Hemma</a> <a href="" onclick="homeFunction(false)">Går ut</a> 
+  <div id="datadiv"></div>
 
-    
-    
-    
-    
-    
-    
-    
-<h1>This is a Heading</h1>
-<p style="color: blueviolet">This is a paragraph.</p>
+  <script language="javascript">
 
+    const datadiv = document.getElementById('datadiv');
+
+    const uri = 'https://5cd130afd4a78300147be593.mockapi.io/Home';
+    fetch(uri)
+      .then((resp) => resp.json())
+      .then(function (datas) 
+      {
+        return datas.map(function (data) 
+        {
+            let divtag = document.createElement('div'); 
+            divtag.innerHTML = `${data.name} - ${data.isHome}`;
+            datadiv.appendChild(divtag);
+        })       
+      });
+
+
+      function homeFunction(isHomeNow)
+      {
+        var temp = Math.floor((Math.random() * 10) + 15);
+        var data = {name: "Erik", isHome: isHomeNow}
+
+        fetch(uri, 
+        {
+          method: 'post', 
+          headers:
+          {
+            'Accept' : 'application/json, text/plain, */*',
+            'Content-Type' : 'application/json'
+          },
+          body: JSON.stringify(data)
+        }).then(res => res.json())
+        .then(res => console.log(res))
+        }
+  </script>
 </body>
 </html>
+
