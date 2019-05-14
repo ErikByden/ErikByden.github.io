@@ -1,65 +1,63 @@
 
-
-
 <!DOCTYPE html>
 <html>
-
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>MockAPI</title>
-
-  <style>
-    div {
-    border: 2px solid green;
-    padding: 5px;
-    margin: 5px;
-  } 
-  
-
-</style>
-
+    
+<title>Project Mirror</title>
+    
 </head>
-
+    
+    
 <body>
-  <a href="" onclick="homeFunction(true)">Hemma</a> <a href="" onclick="homeFunction(false)">Går ut</a> 
-  <div id="datadiv"></div>
 
-  <script language="javascript">
+    <div id="info">    </div>
+    <script language="javascript">
+        
 
-    const datadiv = document.getElementById('datadiv');
+var request = new XMLHttpRequest()
+request.open('GET', 'https://cors-anywhere.herokuapp.com/http://worldclockapi.com/api/jsonp/cet/now?callback=mycallback', true)
 
-    const uri = 'https://5cd130afd4a78300147be593.mockapi.io/Home';
-    fetch(uri)
+request.onload = function() {
+  // Begin accessing JSON data here
+  var data = JSON.parse(this.response)
+  if (request.status >= 200 && request.status < 400) {
+      
+         const info = document.getElementById('info');
+ 
+   
+      fetch('https://cors-anywhere.herokuapp.com/http://worldclockapi.com/api/jsonp/cet/now?callback=mycallback')
       .then((resp) => resp.json())
       .then(function (datas) 
       {
         return datas.map(function (data) 
         {
             let divtag = document.createElement('div'); 
-            divtag.innerHTML = `${data.name} - ${data.isHome}`;
+            divtag.innerHTML = `${data.currentDateTime}`;
             datadiv.appendChild(divtag);
         })       
       });
+      
+      
+      
+    }
+      
+  } else {
+    const errorMessage = document.createElement('marquee')
+    errorMessage.textContent = `Gah, it's not working!`
+    app.appendChild(errorMessage)
+  }
+}
 
-
-      function homeFunction(isHomeNow)
-      {
-        var temp = Math.floor((Math.random() * 10) + 15);
-        var data = {name: "Erik", isHome: isHomeNow}
-
-        fetch(uri, 
-        {
-          method: 'post', 
-          headers:
-          {
-            'Accept' : 'application/json, text/plain, */*',
-            'Content-Type' : 'application/json'
-          },
-          body: JSON.stringify(data)
-        }).then(res => res.json())
-        .then(res => console.log(res))
-        }
+request.send()
+        
   </script>
+    
+    
+    
+    
+<h1>This is a Heading</h1>
+<p style="color: blueviolet">This is a paragraph.</p>
+
 </body>
 </html>
 
