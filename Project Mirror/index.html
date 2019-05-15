@@ -3,6 +3,19 @@
 <html>
 <head>
     
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+  <style>
+    div {
+    border: 2px solid green;
+    padding: 5px;
+    margin: 5px;
+  } 
+  
+
+</style>
+    
+    
 <title>Project Mirror</title>
     
 </head>
@@ -10,53 +23,44 @@
     
 <body>
 
+      <div id="datadiv"></div>
     <div id="info">    </div>
     <script language="javascript">
+
+        
+     const datadiv = document.getElementById('datadiv');
+
+      const uri1 ='https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/weather?q=Stockholm&APPID=0c6c77820236b1a47e8ac996c35c21c8&units=metric';
+    //const uri = 'https://cors-anywhere.herokuapp.com/http://worldclockapi.com/api/jsonp/cet/now?callback=mycallback';
+    
+      fetch(uri1)
+    .then(weatherResp => weatherResp.json())
+        .then(weatherData =>
+        {
+            console.log (weatherData.main.temp);
+            datadiv.innerHTML = `temp: ${weatherData.main.temp} - ${weatherData.weather[0].description}`;
+        })
         
 
-var request = new XMLHttpRequest()
-request.open('GET', 'https://cors-anywhere.herokuapp.com/http://worldclockapi.com/api/jsonp/cet/now?callback=mycallback', true)
-
-request.onload = function() {
-  // Begin accessing JSON data here
-  var data = JSON.parse(this.response)
-  if (request.status >= 200 && request.status < 400) {
-      
+        
+        
          const info = document.getElementById('info');
- 
-   
-      fetch('https://cors-anywhere.herokuapp.com/http://worldclockapi.com/api/jsonp/cet/now?callback=mycallback')
-      .then((resp) => resp.json())
-      .then(function (datas) 
-      {
-        return datas.map(function (data) 
-        {
-            let divtag = document.createElement('div'); 
-            divtag.innerHTML = `${data.currentDateTime}`;
-            datadiv.appendChild(divtag);
-        })       
-      });
-      
-      
-      
-    }
-      
-  } else {
-    const errorMessage = document.createElement('marquee')
-    errorMessage.textContent = `Gah, it's not working!`
-    app.appendChild(errorMessage)
-  }
-}
 
-request.send()
+      const uri2 ='https://cors-anywhere.herokuapp.com/http://worldtimeapi.org/api/timezone/Europe/Stockholm';
+    
+      fetch(uri2)
+    .then(time => time.json())
+        .then(timeData =>
+        {
+            console.log (timeData.datetime);
+            info.innerHTML =  `${ timeData.datetime}`;
+        }) 
+
+
         
   </script>
     
     
-    
-    
-<h1>This is a Heading</h1>
-<p style="color: blueviolet">This is a paragraph.</p>
 
 </body>
 </html>
