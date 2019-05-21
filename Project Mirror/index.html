@@ -23,8 +23,8 @@
     
 <body>
 
-      <div id="datadiv"></div>
-    <div id="info">    </div>
+      <div id="datadivWeather"></div>
+      <div id="datadivTime"></div>
     
     
     
@@ -34,39 +34,43 @@
 
     
     
-    Memo: <input type="text" id="memo"/> <a href="#" onclick="createFunctionMemo(memo)">Skapa Memo</a> 
+    Memo:<input type="text" id="memo"/> <a href="#" onclick="createFunctionMemo(memo)">Skapa Memo</a> 
   
-     <div id="datadivMemo"></div>
+    <div id="datadivMemo"></div>
     
+    Avgångar ifrån Danderyds Sjukhus mot Liljeholmen
+    <div id="datadivMetro"></div>
+    Avgångar ifrån Norrtälje mot Tekniska Högskolan
+    <div id="datadivBuss"></div>
     
     <script language="javascript">
 
         
-     const datadiv = document.getElementById('datadiv');
+     const datadivWeahter = document.getElementById('datadivWeather');
 
-      const uri1 ='https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/weather?q=Stockholm&APPID=0c6c77820236b1a47e8ac996c35c21c8&units=metric';
+      const uriWeather ='https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/weather?q=Stockholm&APPID=0c6c77820236b1a47e8ac996c35c21c8&units=metric';
     
-      fetch(uri1)
+      fetch(uriWeather)
     .then(weatherResp => weatherResp.json())
         .then(weatherData =>
         {
             console.log (weatherData.main.temp);
-            datadiv.innerHTML = `temp: ${weatherData.main.temp} - ${weatherData.weather[0].description}`;
+            datadivWeather.innerHTML = `temp: ${weatherData.main.temp} - ${weatherData.weather[0].description}`;
         })
         
 
         
         
-         const info = document.getElementById('info');
+         const datadivTime = document.getElementById('datadivTime');
 
-      const uri2 ='https://cors-anywhere.herokuapp.com/http://worldtimeapi.org/api/timezone/Europe/Stockholm';
+      const uriTime ='https://cors-anywhere.herokuapp.com/http://worldtimeapi.org/api/timezone/Europe/Stockholm';
     
-      fetch(uri2)
+      fetch(uriTime)
     .then(time => time.json())
         .then(timeData =>
         {
             console.log (timeData.datetime);
-            info.innerHTML =  `${ timeData.datetime}`;
+            datadivTime.innerHTML =  `${ timeData.datetime}`;
         }) 
 
 
@@ -83,7 +87,7 @@
         
         
            const uriHome = 'https://5cd130afd4a78300147be593.mockapi.io/Home';//https://5cd130aed4a78300147be58d.mockapi.io/Test
-    const uriMemo = 'https://5cd130afd4a78300147be593.mockapi.io/memo';//https://5cd130aed4a78300147be58d.mockapi.io/Test
+           const uriMemo = 'https://5cd130afd4a78300147be593.mockapi.io/memo';//https://5cd130aed4a78300147be58d.mockapi.io/Test
 
     loadData();
     loadData2();
@@ -110,7 +114,7 @@
       
       function loadData2(){
           
-                  const datadivMemo = document.getElementById('datadivMemo');
+         const datadivMemo = document.getElementById('datadivMemo');
       datadivMemo.innerHTML = '';
       fetch(uriMemo)
         .then((resp) => resp.json())
@@ -296,6 +300,89 @@
 
 
 
+        
+        
+           const departurediv = document.getElementById('datadivMetro');
+
+    const uriMetro = 'https://cors-anywhere.herokuapp.com/http://api.sl.se/api2/realtimedeparturesV4.json?key=d3e1d3b878f0449d84925a18c7d50d84&siteid=9201&timewindow=10';//gammalt site id =9192
+    fetch(uriMetro)
+      .then((resp) => resp.json())
+      .then(function (data) 
+      {
+        let departures = data.ResponseData.Metros; //ResponseData och Metros är ord som SL valt.
+        return departures.map(function (departure) 
+        {
+            let divtag = document.createElement('div');
+
+            var devtext = "";
+
+            // Här kollar vi om det finns avvikelser i trafiken, t ex "Inställd"
+            if(departure.Deviations != null)
+            {
+                for(var i = 0; i < departure.Deviations.length; i++) 
+                {
+                    var obj = departure.Deviations[i];
+                    devtext += obj.Text;
+                }
+            }
+
+            divtag.innerHTML = `${departure.GroupOfLine + ":" + departure.DisplayTime + ": Linje " + departure.LineNumber + ":" + devtext}`;
+            departurediv.appendChild(divtag);
+        })
+      })
+      .catch(function (error) 
+      {
+        console.log(error);
+      }); 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+                const datadivBuss = document.getElementById('datadivBuss');
+
+    const uriBuss = 'https://cors-anywhere.herokuapp.com/http://api.sl.se/api2/realtimedeparturesV4.json?key=d3e1d3b878f0449d84925a18c7d50d84&siteid=6019&timewindow=30';//gammalt site id =9192
+    fetch(uriBuss)
+      .then((resp) => resp.json())
+      .then(function (data) 
+      {
+        let departures = data.ResponseData.Buses; //ResponseData och Metros är ord som SL valt.
+        return departures.map(function (departure) 
+        {
+            let divtag = document.createElement('div');
+
+            var devtext = "";
+
+            // Här kollar vi om det finns avvikelser i trafiken, t ex "Inställd"
+            if(departure.Deviations != null)
+            {
+                for(var i = 0; i < departure.Deviations.length; i++) 
+                {
+                    var obj = departure.Deviations[i];
+                    devtext += obj.Text;
+                }
+            }
+
+            if(departure.Destination=="Stockholm")
+            {  
+         divtag.innerHTML = `${departure.GroupOfLine + ":" + departure.DisplayTime + ": Linje " + departure.LineNumber + ":" + devtext}`;
+         datadivBuss.appendChild(divtag);
+            }
+
+        })
+      })
+      .catch(function (error) 
+      {
+        console.log(error);
+      });    
+        
+        
+        
+        
         
         
         
