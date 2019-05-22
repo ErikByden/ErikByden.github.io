@@ -40,7 +40,7 @@
     
     Avgångar ifrån Danderyds Sjukhus mot Liljeholmen
     <div id="datadivMetro"></div>
-    Avgångar ifrån Norrtälje mot Tekniska Högskolan
+    Avgångar ifrån Campus Roslagen mot Tekniska Högskolan
     <div id="datadivBuss"></div>
     
     <script language="javascript">
@@ -165,12 +165,9 @@
       
       function deleteFunctionMemo(id) {
 
-        // Den här raden behövs inte då vi raderar en post 
-      //var data = { name: "Micke", isHome: isHomeNow }
-
       fetch(uriMemo + "/" + id,
         {
-          // Nytt!
+          
           method: "DELETE", // *GET, POST, PUT, DELETE, etc.
           mode: "cors", // no-cors, cors, *same-origin
           cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
@@ -197,7 +194,6 @@
       
 
 
-    // Vi byter namn på den här funktionen, från 'homeFunction' till 'createFunction'
     // Det vi skriver i textrutan hamnar i variabeln 'textInput'
     function createFunction(isHomeNow) {
       const textInput = document.getElementById('name').value;
@@ -269,12 +265,9 @@
 
     function deleteFunction(id) {
 
-        // Den här raden behövs inte då vi raderar en post 
-      //var data = { name: "Micke", isHome: isHomeNow }
-
       fetch(uriHome + "/" + id,
         {
-          // Nytt!
+      
           method: "DELETE", // *GET, POST, PUT, DELETE, etc.
           mode: "cors", // no-cors, cors, *same-origin
           cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
